@@ -7,7 +7,6 @@ export const useChartStyles = makeStyles((itemCount: number) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    // alignItems: 'center',
     marginBottom: '3%',
   },
   chartOutterContainer: {

@@ -5,6 +5,7 @@ import cors from 'cors';
 import * as logger from 'firebase-functions/logger';
 import { trafficStatSchema } from '../../shared';
 import { ZodIssue } from 'zod';
+import { authenticate } from './authMiddleware';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -12,10 +13,12 @@ const db = admin.firestore();
 const app = express();
 app.use(cors({ origin: true }));
 
-app.get('/trafficStats', async (req, res) => {
+const trafficStatsCollection = 'trafficStats';
+
+app.get('/trafficStats', authenticate, async (req, res) => {
   logger.info('get traffic stats request was made');
   try {
-    const snapshot = await db.collection('trafficStats').get();
+    const snapshot = await db.collection(trafficStatsCollection).get();
     const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     logger.info('traffic stats were fetched successfully');
     res.status(200).send(data);
@@ -25,7 +28,7 @@ app.get('/trafficStats', async (req, res) => {
   }
 });
 
-app.post('/trafficStats/add', async (req, res) => {
+app.post('/trafficStats/add', authenticate, async (req, res) => {
   logger.info('an add trafficStats request was made');
   const result = trafficStatSchema.safeParse(req.body);
   if (!result.success) {
@@ -43,7 +46,9 @@ app.post('/trafficStats/add', async (req, res) => {
     logger.info(
       `recieved a valid stats object: ${newTrafficStat.toString()}, starting firestore insertion.`
     );
-    const docRef = await db.collection('trafficStats').add(newTrafficStat);
+    const docRef = await db
+      .collection(trafficStatsCollection)
+      .add(newTrafficStat);
     logger.info(`traffic stat was inserted successfully with id: ${docRef.id}`);
     res.status(201).send({
       message: 'traffic stat was inserted successfully',
@@ -56,7 +61,7 @@ app.post('/trafficStats/add', async (req, res) => {
   }
 });
 
-app.put('/trafficStats/update/:id', async (req, res) => {
+app.put('/trafficStats/update/:id', authenticate, async (req, res) => {
   logger.info('an update traffic stats request was made');
   if (!req.params.id) {
     const missingIdMessage = 'request was recieved without an id';
@@ -81,7 +86,10 @@ app.put('/trafficStats/update/:id', async (req, res) => {
     logger.info(
       `recieved a valid stats object: ${trafficStat.toString()}, starting firestore update.`
     );
-    await db.collection('trafficStats').doc(req.params.id).update(trafficStat);
+    await db
+      .collection(trafficStatsCollection)
+      .doc(req.params.id)
+      .update(trafficStat);
     const successMessage = 'traffic stat was updated successfully';
     logger.info(successMessage);
     res.status(200).send({
@@ -94,7 +102,7 @@ app.put('/trafficStats/update/:id', async (req, res) => {
   }
 });
 
-app.delete('/trafficStats/delete/:id', async (req, res) => {
+app.delete('/trafficStats/delete/:id', authenticate, async (req, res) => {
   logger.info('a traffic stats deletion request was made');
   if (!req.params.id) {
     const missingIdMessage = 'request was recieved without an id';
@@ -104,7 +112,7 @@ app.delete('/trafficStats/delete/:id', async (req, res) => {
   }
 
   try {
-    await db.collection('trafficStats').doc(req.params.id).delete();
+    await db.collection(trafficStatsCollection).doc(req.params.id).delete();
     const successMessage = 'traffic stat was deleted successfully';
     logger.info(successMessage);
     res.status(200).send({

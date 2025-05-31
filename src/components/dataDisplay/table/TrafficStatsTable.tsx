@@ -14,6 +14,18 @@ interface TrafficStatsTableProps {
   trafficData: SavedTrafficStats[];
 }
 
+const conditionalRowStyles = [
+  {
+    when: () => true,
+    style: {
+      '&:hover': {
+        backgroundColor: '#f0f0f0',
+        cursor: 'pointer',
+      },
+    },
+  },
+];
+
 export const TrafficStatsTable = React.memo(
   ({ trafficData }: TrafficStatsTableProps) => {
     const [isOpenForm, setIsOpenForm] = useState<boolean>(false);
@@ -66,6 +78,7 @@ export const TrafficStatsTable = React.memo(
             pagination
             fixedHeader
             onRowDoubleClicked={onItemSelection}
+            conditionalRowStyles={conditionalRowStyles}
           />
         </Box>
         <Button

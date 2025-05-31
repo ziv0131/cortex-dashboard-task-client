@@ -14,6 +14,7 @@ import {
 } from '../services/firebaseDataAccess';
 import { useFetchTrafficData } from '../hooks/useFetchTrafficData';
 import { NoRecievedIdError } from '../errors';
+import type { User } from 'firebase/auth';
 
 export const TrafficDataContext = createContext<
   | {
@@ -29,6 +30,7 @@ export const TrafficDataContext = createContext<
 
 interface ContextProviderProps {
   children: ReactNode;
+  idToken: string;
 }
 
 export const useTrafficDataContext = () => {
@@ -41,13 +43,16 @@ export const useTrafficDataContext = () => {
   return context;
 };
 
-export const TrafficDataProvider = ({ children }: ContextProviderProps) => {
+export const TrafficDataProvider = ({
+  children,
+  idToken,
+}: ContextProviderProps) => {
   const { trafficData, setTrafficData, isLoading, isError, fetchData } =
-    useFetchTrafficData();
+    useFetchTrafficData(idToken);
 
   const addTrafficStat = useCallback(async (trafficStat: TrafficStats) => {
     try {
-      const id = await postTrafficStat(trafficStat);
+      const id = await postTrafficStat(trafficStat, idToken);
       setTrafficData([...trafficData, { id, ...trafficStat }]);
       return '';
     } catch (error) {
@@ -64,7 +69,7 @@ export const TrafficDataProvider = ({ children }: ContextProviderProps) => {
   const updateTrafficStat = useCallback(
     async (trafficStat: SavedTrafficStats) => {
       try {
-        await postTrafficStat(trafficStat);
+        await postTrafficStat(trafficStat, idToken);
         setTrafficData([...trafficData, trafficStat]);
         return '';
       } catch (error) {
@@ -78,7 +83,7 @@ export const TrafficDataProvider = ({ children }: ContextProviderProps) => {
 
   const deleteTrafficStat = useCallback(async (id: string) => {
     try {
-      await removeTrafficStat(id);
+      await removeTrafficStat(id, idToken);
       setTrafficData(trafficData.filter((ts) => ts.id !== id));
       return '';
     } catch (error) {

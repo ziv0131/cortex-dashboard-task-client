@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type Dispatch } from 'react';
-import type { TrafficStats } from '../../../shared';
+import type { SavedTrafficStats, TrafficStats } from '../../../shared';
 import 'rsuite/dist/rsuite.min.css';
 import { DateRangePicker } from 'rsuite';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -9,8 +9,8 @@ import { NumericFormat } from 'react-number-format';
 import { useFilterSelectorStyles } from './filterSelectorStyles';
 
 interface FilterSelectorProps {
-  recievedData: TrafficStats[];
-  setFilteredData: Dispatch<TrafficStats[]>;
+  recievedData: SavedTrafficStats[];
+  setFilteredData: Dispatch<SavedTrafficStats[]>;
 }
 
 type DateRange = [Date, Date];
@@ -41,13 +41,6 @@ export const FilterSelector = ({
     }
     setFilteredData(filtered);
   };
-
-  const filteredData = useMemo(() => {}, [
-    recievedData,
-    dateRange,
-    minVisits,
-    maxVisits,
-  ]);
 
   const onDateRangeChange = (newDateRange: DateRange | null) => {
     setDateRange(newDateRange);

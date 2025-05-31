@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState, type Dispatch } from 'react';
 import type { SortingOption } from '../../models';
 import { Radio, RadioGroup, FormControlLabel } from '@mui/material';
-import type { TrafficStats } from '../../../shared';
+import type { SavedTrafficStats, TrafficStats } from '../../../shared';
 import { useSortingSelectorStyles } from './sortingSelectorStyles';
 
 interface SortingSelectorProps {
-  recievedData: TrafficStats[];
-  setSortedData: Dispatch<TrafficStats[]>;
+  recievedData: SavedTrafficStats[];
+  setSortedData: Dispatch<SavedTrafficStats[]>;
 }
 
 export const SortingSelector = ({

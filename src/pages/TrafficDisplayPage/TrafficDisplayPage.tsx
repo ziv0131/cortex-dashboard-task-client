@@ -1,18 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
-import { getTrafficStats } from '../services/firebaseDataAccess';
-import { type TrafficStats } from '../../shared';
+import { useEffect, useState } from 'react';
+import { type SavedTrafficStats } from '../../../shared';
 import { Box, Container, Typography } from '@mui/material';
-import { TrafficStatsChart } from '../components/dataDisplay';
-import { TrafficStatsTable } from '../components/dataDisplay/table/TrafficStatsTable';
-import { SortingSelector, FilterSelector } from '../components';
-import { getLocalTrafficData } from '../data/insertData';
+import { TrafficStatsChart } from '../../components/dataDisplay';
+import { TrafficStatsTable } from '../../components/dataDisplay/table/TrafficStatsTable';
+import { SortingSelector, FilterSelector } from '../../components';
 import { useTrafficDisplayPageStyles } from './trafficDisplayPageStyles';
-import { useTrafficDataContext } from '../contexts/TrafficDataContext';
+import { useTrafficDataContext } from '../../contexts/TrafficDataContext';
 
 export const TrafficDisplayPage = () => {
   const { trafficData, isLoading, isError } = useTrafficDataContext();
-  const [filteredData, setFilteredData] = useState<TrafficStats[]>(trafficData);
-  const [sortedData, setSortedData] = useState<TrafficStats[]>(filteredData);
+  const [filteredData, setFilteredData] =
+    useState<SavedTrafficStats[]>(trafficData);
+  const [sortedData, setSortedData] =
+    useState<SavedTrafficStats[]>(filteredData);
 
   useEffect(() => {
     setFilteredData(trafficData);
