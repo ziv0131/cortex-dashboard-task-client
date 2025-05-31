@@ -1,2 +1,2 @@
-export { TrafficStatsChart } from './TrafficStatsChart';
-export { TrafficStatsTable } from './TrafficStatsTable';
+export { TrafficStatsChart } from './chart/TrafficStatsChart';
+export { TrafficStatsTable } from './table/TrafficStatsTable';

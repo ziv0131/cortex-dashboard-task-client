@@ -16,8 +16,10 @@
     "@mui/styles": "^6.4.8",
     "@mui/x-date-pickers": "^8.4.0",
     "@mui/x-date-pickers-pro": "^8.4.0",
+    "@wojtekmaj/react-daterange-picker": "^6.0.0",
     "axios": "^1.9.0",
     "chart.js": "^4.4.9",
+    "date-fns": "^2.30.0",
     "dayjs": "^1.11.13",
     "firebase": "^11.8.1",
     "mui": "^0.0.1",
@@ -27,7 +29,9 @@
     "react-dom": "^19.1.0",
     "react-loading": "^2.0.3",
     "react-number-format": "^5.4.4",
+    "rsuite": "^5.82.0",
     "uuid": "^11.1.0",
+    "weeknumber": "^1.2.1",
     "zod": "^3.25.31"
   },
   "devDependencies": {

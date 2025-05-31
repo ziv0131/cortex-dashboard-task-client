@@ -1,1 +1,1 @@
-export type SortingOption = 'date' | 'visits' | 'none';
+export type SortingOption = 'date' | 'visits';

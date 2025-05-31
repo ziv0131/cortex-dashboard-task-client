@@ -72,6 +72,13 @@ const trafficData = [
   { date: '2025-04-30', visits: 148 },
 ];
 
+export const getLocalTrafficData = async () => {
+  return trafficData.map(({ date, visits }) => ({
+    date: new Date(date),
+    visits,
+  }));
+};
+
 const collRef = collection(db, 'trafficStats');
 
 export const insertTrafficData = async () => {
