@@ -11,7 +11,6 @@ import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import type { ChartTrafficStats } from '../ChartTrafficStats';
 import { formatDateString } from '../../../../utils';
-import { useChartStyles } from '../chartStyles';
 import { useChartAggregationStyles } from './chartAggregationStyles';
 
 dayjs.extend(isoWeek);

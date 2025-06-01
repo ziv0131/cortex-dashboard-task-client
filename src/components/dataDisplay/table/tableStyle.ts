@@ -14,6 +14,7 @@ export const useTableStyles = makeStyles(() => ({
     width: '90%',
   },
   newTrafficDataButton: {
+    height: '100%',
     width: '10%',
   },
 }));

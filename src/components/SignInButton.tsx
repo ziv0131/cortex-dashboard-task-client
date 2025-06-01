@@ -1,4 +1,4 @@
-import React, { type Dispatch } from 'react';
+import { type Dispatch } from 'react';
 import { auth, provider } from '../firebase';
 import { signInWithPopup, type User } from 'firebase/auth';
 import { Button } from '@mui/material';

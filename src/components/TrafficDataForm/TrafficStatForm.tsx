@@ -1,16 +1,7 @@
-import {
-  useCallback,
-  useContext,
-  useRef,
-  useState,
-  type Dispatch,
-} from 'react';
-import { type TrafficStats, type SavedTrafficStats } from '../../../shared';
+import { useCallback, useEffect, useRef, useState, type Dispatch } from 'react';
+import { type SavedTrafficStats } from '../../../shared';
 import type { FormType } from '../../models';
-import {
-  TrafficDataContext,
-  useTrafficDataContext,
-} from '../../contexts/TrafficDataContext';
+import { useTrafficDataContext } from '../../contexts/TrafficDataContext';
 import {
   Button,
   Dialog,
@@ -18,15 +9,12 @@ import {
   DialogContent,
   DialogTitle,
   Paper,
-  TextField,
   Typography,
 } from '@mui/material';
 import { NumericFormat, type NumberFormatValues } from 'react-number-format';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV2';
-import type dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import { useTrafficStatsFormStyles } from './trafficStatsFormStyles';
 
@@ -52,6 +40,14 @@ export const TrafficStatForm = ({
   );
   const [error, setError] = useState<string>('');
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [visits]);
+
   const { trafficData, deleteTrafficStat, updateTrafficStat, addTrafficStat } =
     useTrafficDataContext();
 
@@ -74,10 +70,10 @@ export const TrafficStatForm = ({
 
   const onUpdate = () => {
     const parsedVisits = parseInt(visits);
-    if (!!trafficStat && !!chosenDate && !isNaN(parsedVisits)) {
+    if (!!trafficStat && !isNaN(parsedVisits)) {
       updateTrafficStat({
         id: trafficStat.id,
-        date: chosenDate!,
+        date: trafficStat.date,
         visits: parsedVisits,
       }).then((errorMessage) => {
         if (errorMessage !== '') {
@@ -137,7 +133,8 @@ export const TrafficStatForm = ({
     );
   };
 
-  const onSubmit = () => {
+  const onSubmit = (e: React.FormEvent<HTMLDivElement>) => {
+    e.preventDefault();
     formType === 'create' ? onAdd() : onUpdate();
   };
 
@@ -170,6 +167,7 @@ export const TrafficStatForm = ({
           />
         </LocalizationProvider>
         <NumericFormat
+          getInputRef={inputRef}
           value={visits}
           min={0}
           decimalScale={0}

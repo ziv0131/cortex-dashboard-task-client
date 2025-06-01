@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { auth } from '../../firebase';
-import { onAuthStateChanged, type User } from 'firebase/auth';
+import { useState } from 'react';
+import { type User } from 'firebase/auth';
 import { SignInButton } from '../../components/SignInButton';
 import { Container } from '@mui/material';
 import { useMainPageStyles } from './useMainPageStyles';

@@ -7,6 +7,10 @@ export const authenticate = async (
   res: Response,
   next: NextFunction
 ) => {
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(204);
+    return;
+  }
   logger.info('starting authentication');
   const authorizationHeader = req.headers.authorization || '';
   const token = authorizationHeader.startsWith('Bearer ')

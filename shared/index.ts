@@ -3,4 +3,4 @@ export {
   savedTrafficStatSchema,
   type TrafficStats,
   type SavedTrafficStats,
-} from './models';
+} from './models/index.js';

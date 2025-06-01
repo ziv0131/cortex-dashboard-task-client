@@ -1,13 +1,10 @@
 import DataTable from 'react-data-table-component';
 import type { SavedTrafficStats, TrafficStats } from '../../../../shared';
 import { formatDateString } from '../../../utils';
-import { Box, Button, Container, Grid } from '@mui/material';
+import { Box, Button, Container } from '@mui/material';
 import React, { useState } from 'react';
 import { useTableStyles } from './tableStyle';
-import {
-  TrafficStatForm,
-  type TrafficStatFormProps,
-} from '../../TrafficDataForm/TrafficStatForm';
+import { TrafficStatForm } from '../../TrafficDataForm/TrafficStatForm';
 import type { FormType } from '../../../models';
 
 interface TrafficStatsTableProps {
@@ -87,7 +84,7 @@ export const TrafficStatsTable = React.memo(
           className={classes.newTrafficDataButton}
           onClick={() => onAddClick()}
         >
-          Add
+          +
         </Button>
         {isOpenForm && <TrafficStatForm {...formProps} />}
       </Container>

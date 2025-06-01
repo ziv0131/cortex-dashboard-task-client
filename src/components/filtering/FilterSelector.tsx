@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState, type Dispatch } from 'react';
-import type { SavedTrafficStats, TrafficStats } from '../../../shared';
+import { useState, type Dispatch } from 'react';
+import type { SavedTrafficStats } from '../../../shared';
 import 'rsuite/dist/rsuite.min.css';
 import { DateRangePicker } from 'rsuite';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { NumericFormat } from 'react-number-format';
 import { useFilterSelectorStyles } from './filterSelectorStyles';
 

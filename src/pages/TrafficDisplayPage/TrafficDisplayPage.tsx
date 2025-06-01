@@ -39,11 +39,11 @@ export const TrafficDisplayPage = () => {
           <Box className={classes.upperPageContainer}>
             <Box className={classes.sortingAndFilteringContainer}>
               <FilterSelector
-                recievedData={filteredData}
+                recievedData={trafficData}
                 setFilteredData={setFilteredData}
               />
               <SortingSelector
-                recievedData={sortedData}
+                recievedData={filteredData}
                 setSortedData={setSortedData}
               />
             </Box>

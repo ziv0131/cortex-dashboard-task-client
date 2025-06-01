@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type Dispatch } from 'react';
 import type { SortingOption } from '../../models';
 import { Radio, RadioGroup, FormControlLabel } from '@mui/material';
-import type { SavedTrafficStats, TrafficStats } from '../../../shared';
+import type { SavedTrafficStats } from '../../../shared';
 import { useSortingSelectorStyles } from './sortingSelectorStyles';
 
 interface SortingSelectorProps {

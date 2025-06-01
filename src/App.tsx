@@ -1,7 +1,5 @@
 import React, { type ReactNode } from 'react';
-import { TrafficDisplayPage } from './pages/TrafficDisplayPage/TrafficDisplayPage';
 import { Typography } from '@mui/material';
-import { TrafficDataProvider } from './contexts/TrafficDataContext';
 import { MainPage } from './pages/MainPage/MainPage';
 
 interface Props {
@@ -22,7 +20,7 @@ class App extends React.Component<Props, State> {
       import.meta.env.VITE_FIREBASE_API_KEY,
       import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
       import.meta.env.VITE_FIREBASE_PROJECT_ID,
-      import.meta.env.VITE_FIREBASE_REGION,
+      import.meta.env.VITE_FIREBASE_FUNCTIONS_URL,
     ].filter((envVariable) => !envVariable);
     if (missingEssentialEnvVariables.length > 0) {
       console.error(

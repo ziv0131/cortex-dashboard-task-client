@@ -1,17 +1,24 @@
-import functions from 'firebase-functions/v2/https';
+import { onRequest } from 'firebase-functions/v2/https';
 import express from 'express';
 import admin from 'firebase-admin';
 import cors from 'cors';
 import * as logger from 'firebase-functions/logger';
-import { trafficStatSchema } from '../../shared';
+import { trafficStatSchema } from './trafficStatsSchema';
 import { ZodIssue } from 'zod';
 import { authenticate } from './authMiddleware';
 
-admin.initializeApp();
 const db = admin.firestore();
 
 const app = express();
-app.use(cors({ origin: true }));
+
+const corsOptions = {
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  maxAge: 86400,
+};
+app.use(cors(corsOptions));
 
 const trafficStatsCollection = 'trafficStats';
 
@@ -29,23 +36,24 @@ app.get('/trafficStats', authenticate, async (req, res) => {
 });
 
 app.post('/trafficStats/add', authenticate, async (req, res) => {
-  logger.info('an add trafficStats request was made');
+  logger.info({
+    message: 'an add trafficStats request was made',
+    reqBody: req.body,
+  });
   const result = trafficStatSchema.safeParse(req.body);
   if (!result.success) {
-    const invalidStatsErrorMessage = `recieved an invalid traffic stat: ${result.error.errors.reduce(
-      (acc: string, error: ZodIssue) => (acc += `${error.message};`),
-      ''
-    )}`;
-    logger.error(invalidStatsErrorMessage);
+    const invalidStatsErrorMessage = `recieved an invalid traffic stat: ${result.error.errors}`;
+    logger.error({ message: invalidStatsErrorMessage, error: result.error });
     res.status(400).json({ message: invalidStatsErrorMessage });
     return;
   }
 
   const newTrafficStat = result.data;
   try {
-    logger.info(
-      `recieved a valid stats object: ${newTrafficStat.toString()}, starting firestore insertion.`
-    );
+    logger.info({
+      message: 'recieved a valid stats object, starting firestore insertion.',
+      trafficStat: newTrafficStat,
+    });
     const docRef = await db
       .collection(trafficStatsCollection)
       .add(newTrafficStat);
@@ -125,4 +133,4 @@ app.delete('/trafficStats/delete/:id', authenticate, async (req, res) => {
   }
 });
 
-exports.api = functions.onRequest(app);
+exports.api = onRequest({ cors: true }, app);

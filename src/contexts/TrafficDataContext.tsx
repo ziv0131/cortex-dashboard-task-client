@@ -1,20 +1,12 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from 'react';
+import { createContext, useCallback, useContext, type ReactNode } from 'react';
 import type { SavedTrafficStats, TrafficStats } from '../../shared';
 import {
-  getTrafficStats,
   postTrafficStat,
+  putTrafficStat,
   removeTrafficStat,
 } from '../services/firebaseDataAccess';
 import { useFetchTrafficData } from '../hooks/useFetchTrafficData';
 import { NoRecievedIdError } from '../errors';
-import type { User } from 'firebase/auth';
 
 export const TrafficDataContext = createContext<
   | {
@@ -50,26 +42,29 @@ export const TrafficDataProvider = ({
   const { trafficData, setTrafficData, isLoading, isError, fetchData } =
     useFetchTrafficData(idToken);
 
-  const addTrafficStat = useCallback(async (trafficStat: TrafficStats) => {
-    try {
-      const id = await postTrafficStat(trafficStat, idToken);
-      setTrafficData([...trafficData, { id, ...trafficStat }]);
-      return '';
-    } catch (error) {
-      if (error instanceof NoRecievedIdError) {
-        fetchData();
+  const addTrafficStat = useCallback(
+    async (trafficStat: TrafficStats) => {
+      try {
+        const id = await postTrafficStat(trafficStat, idToken);
+        setTrafficData([...trafficData, { id, ...trafficStat }]);
         return '';
+      } catch (error) {
+        if (error instanceof NoRecievedIdError) {
+          await fetchData();
+          return '';
+        }
+        const baseErrorMessage = 'There was an error adding the traffic stat';
+        console.error(`${baseErrorMessage}: `, error);
+        return baseErrorMessage;
       }
-      const baseErrorMessage = 'There was an error adding the traffic stat';
-      console.error(`${baseErrorMessage}: `, error);
-      return baseErrorMessage;
-    }
-  }, []);
+    },
+    [trafficData]
+  );
 
   const updateTrafficStat = useCallback(
     async (trafficStat: SavedTrafficStats) => {
       try {
-        await postTrafficStat(trafficStat, idToken);
+        await putTrafficStat(trafficStat, idToken);
         setTrafficData([...trafficData, trafficStat]);
         return '';
       } catch (error) {
@@ -78,20 +73,23 @@ export const TrafficDataProvider = ({
         return baseErrorMessage;
       }
     },
-    []
+    [trafficData]
   );
 
-  const deleteTrafficStat = useCallback(async (id: string) => {
-    try {
-      await removeTrafficStat(id, idToken);
-      setTrafficData(trafficData.filter((ts) => ts.id !== id));
-      return '';
-    } catch (error) {
-      const baseErrorMessage = 'There was an error deleting the traffic stat';
-      console.error(`${baseErrorMessage}: `, error);
-      return baseErrorMessage;
-    }
-  }, []);
+  const deleteTrafficStat = useCallback(
+    async (id: string) => {
+      try {
+        await removeTrafficStat(id, idToken);
+        setTrafficData(trafficData.filter((ts) => ts.id !== id));
+        return '';
+      } catch (error) {
+        const baseErrorMessage = 'There was an error deleting the traffic stat';
+        console.error(`${baseErrorMessage}: `, error);
+        return baseErrorMessage;
+      }
+    },
+    [trafficData]
+  );
 
   return (
     <TrafficDataContext.Provider

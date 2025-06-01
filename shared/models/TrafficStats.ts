@@ -1,7 +1,13 @@
-import z, { isValid } from 'zod';
+import z from 'zod';
 
 export const trafficStatSchema = z.object({
-  date: z.coerce.date(),
+  date: z
+    .string()
+    .refine((val) => {
+      const date = new Date(val);
+      return !isNaN(date.getTime());
+    })
+    .transform((val) => new Date(val)),
   visits: z.number().nonnegative().int(),
 });
 
