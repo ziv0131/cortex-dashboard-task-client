@@ -8,7 +8,6 @@ export const useTrafficDisplayPageStyles = makeStyles(() => ({
     flexDirection: 'column',
     justifySelf: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFF7EB',
   },
   errorMessage: {
     marginTop: '20%',
