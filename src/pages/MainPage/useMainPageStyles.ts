@@ -7,7 +7,6 @@ export const useMainPageStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF7EB',
   },
   errorMessage: {
     marginTop: '20%',
